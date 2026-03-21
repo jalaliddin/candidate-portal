@@ -94,7 +94,7 @@ class AdminController extends Controller
 
         if ($request->hasFile('image')) {
             $filename = Str::uuid().'.'.$request->file('image')->getClientOriginalExtension();
-            $request->file('image')->storeAs('public/candidates', $filename);
+            $request->file('image')->storeAs('candidates', $filename, 'public');
             $data['image_path'] = $filename;
         }
 
@@ -126,10 +126,10 @@ class AdminController extends Controller
 
         if ($request->hasFile('image')) {
             if ($candidate->image_path) {
-                Storage::delete('public/candidates/'.$candidate->image_path);
+                Storage::disk('public')->delete('candidates/'.$candidate->image_path);
             }
             $filename = Str::uuid().'.'.$request->file('image')->getClientOriginalExtension();
-            $request->file('image')->storeAs('public/candidates', $filename);
+            $request->file('image')->storeAs('candidates', $filename, 'public');
             $data['image_path'] = $filename;
         }
 
