@@ -1,0 +1,19 @@
+* { font-family: 'Inter', sans-serif; }
+
+.v-card { border-radius: 12px !important; box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important; }
+.v-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.14) !important; }
+
+.v-btn, .v-chip, .v-text-field .v-field { border-radius: 8px !important; }
+
+.v-application { background: #F0F4F8 !important; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #B0BEC5; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #78909C; }
+
+@media print {
+  .app-sidebar, .app-topbar, .reports-tabs { display: none !important; }
+  .v-expansion-panel { box-shadow: none !important; }
+  .profile-card { break-inside: avoid; }
+}
