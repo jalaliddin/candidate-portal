@@ -50,7 +50,11 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/custom.ini
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && chmod -R 755 /var/www/html/bootstrap/cache \
+    && mkdir -p /var/lib/nginx/tmp/client_body \
+    && chown -R www-data:www-data /var/lib/nginx/tmp \
+    && chown -R www-data:www-data /var/log/nginx \
+    && chown -R www-data:www-data /var/run/nginx
 
 EXPOSE 80
 
