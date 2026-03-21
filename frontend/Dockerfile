@@ -7,11 +7,12 @@ RUN npm ci
 
 COPY . .
 
-# VITE_API_URL is injected at build time via docker-compose build args
+# Injected at build time via docker-compose build args
 ARG VITE_API_URL=http://localhost/api
+ARG VITE_STORAGE_URL=http://localhost/storage
 ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_STORAGE_URL=${VITE_STORAGE_URL}
 
-# Update axios baseURL via env variable (handled in vite.config.js env injection)
 RUN npm run build
 
 # ─── Stage 2: Serve with Nginx ──────────────────────────────────────────────
