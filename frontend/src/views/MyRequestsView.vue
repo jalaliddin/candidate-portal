@@ -70,7 +70,7 @@
                 <v-avatar size="32" color="grey-lighten-2">
                   <v-img
                     v-if="item.candidate?.image_path"
-                    :src="`http://localhost:8000/storage/candidates/${item.candidate.image_path}`"
+                    :src="`${$storageUrl}/candidates/${item.candidate.image_path}`"
                     cover
                   />
                   <v-icon v-else icon="mdi-account" size="20" color="grey" />

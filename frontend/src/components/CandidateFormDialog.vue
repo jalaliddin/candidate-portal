@@ -260,7 +260,8 @@ watch(() => props.candidate, (val) => {
       anabin_status: val.anabin_status || '',
       additional_languages: val.additional_languages ? JSON.parse(JSON.stringify(val.additional_languages)) : []
     }
-    imagePreview.value = val.image_path ? `http://localhost:8000/storage/candidates/${val.image_path}` : null
+    const storageUrl = import.meta.env.VITE_STORAGE_URL || 'http://localhost:8000/storage'
+    imagePreview.value = val.image_path ? `${storageUrl}/candidates/${val.image_path}` : null
   } else {
     form.value = defaultForm()
     imagePreview.value = null

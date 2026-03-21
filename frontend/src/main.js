@@ -15,6 +15,8 @@ app.use(router)
 app.use(vuetify)
 app.use(i18n)
 
+app.config.globalProperties.$storageUrl = import.meta.env.VITE_STORAGE_URL || 'http://localhost:8000/storage'
+
 import { useAuthStore } from './stores/auth'
 const authStore = useAuthStore()
 authStore.restoreSession()

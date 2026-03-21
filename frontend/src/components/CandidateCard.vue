@@ -16,7 +16,7 @@
         <v-avatar size="80" :color="candidate.image_path ? undefined : 'grey-lighten-2'">
           <v-img
             v-if="candidate.image_path"
-            :src="`http://localhost:8000/storage/candidates/${candidate.image_path}`"
+            :src="`${$storageUrl}/candidates/${candidate.image_path}`"
             cover
           />
           <v-icon v-else icon="mdi-account-circle" size="80" color="grey" />
