@@ -127,6 +127,7 @@ const adminNavItems = computed(() => [
   { to: '/admin/users', icon: 'mdi-account-tie', title: t('nav.adminUsers') },
   { to: '/admin/requests', icon: 'mdi-clipboard-list', title: t('nav.adminRequests') },
   { to: '/reports/candidates', icon: 'mdi-chart-box', title: t('nav.reports') },
+  { to: '/admin/faq', icon: 'mdi-robot', title: t('nav.adminFaq') },
 ])
 
 const clientNavItems = computed(() => [

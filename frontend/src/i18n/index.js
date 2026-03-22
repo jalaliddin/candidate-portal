@@ -10,6 +10,7 @@ const messages = {
       adminCandidates: 'Candidates',
       adminUsers: 'Clients',
       adminRequests: 'Requests',
+      adminFaq: 'FAQ Bot',
       logout: 'Logout'
     },
     auth: {
@@ -118,7 +119,15 @@ const messages = {
       adminNote: 'Admin Note',
       candidatesByStatus: 'Candidates by Status',
       requestsByType: 'Requests by Type',
-      welcomeBack: 'Welcome back'
+      welcomeBack: 'Welcome back',
+      faqTitle: 'FAQ Management',
+      addFaq: 'Add FAQ',
+      editFaq: 'Edit FAQ',
+      faqQuestion: 'Question',
+      faqAnswer: 'Answer',
+      faqCategory: 'Category',
+      faqSortOrder: 'Sort Order',
+      confirmDeleteFaq: 'Are you sure you want to delete this FAQ?'
     },
     common: {
       save: 'Save',
@@ -155,6 +164,7 @@ const messages = {
       adminCandidates: 'Kandidaten',
       adminUsers: 'Klienten',
       adminRequests: 'Anfragen',
+      adminFaq: 'FAQ Bot',
       logout: 'Abmelden'
     },
     auth: {
@@ -263,7 +273,15 @@ const messages = {
       adminNote: 'Admin-Notiz',
       candidatesByStatus: 'Kandidaten nach Status',
       requestsByType: 'Anfragen nach Typ',
-      welcomeBack: 'Willkommen zurück'
+      welcomeBack: 'Willkommen zurück',
+      faqTitle: 'FAQ-Verwaltung',
+      addFaq: 'FAQ hinzufügen',
+      editFaq: 'FAQ bearbeiten',
+      faqQuestion: 'Frage',
+      faqAnswer: 'Antwort',
+      faqCategory: 'Kategorie',
+      faqSortOrder: 'Reihenfolge',
+      confirmDeleteFaq: 'Möchten Sie diese FAQ wirklich löschen?'
     },
     common: {
       save: 'Speichern',

@@ -48,6 +48,10 @@ services:
       SANCTUM_STATEFUL_DOMAINS: ${DOMAIN:-localhost}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
       LOG_CHANNEL: stderr
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_GROUP_ID: ${TELEGRAM_GROUP_ID:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
     volumes:
       - backend_storage:/var/www/html/storage/app/public
       - backend_logs:/var/www/html/storage/logs

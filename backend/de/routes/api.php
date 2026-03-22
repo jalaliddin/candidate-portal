@@ -1,13 +1,18 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminFaqController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\TelegramController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
+
+// Telegram webhook — public, no auth required
+Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -37,5 +42,11 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::patch('/users/{id}', [AdminController::class, 'userUpdate']);
         Route::delete('/users/{id}', [AdminController::class, 'userDestroy']);
         Route::get('/requests', [RequestController::class, 'adminIndex']);
+
+        // FAQ management
+        Route::get('/faqs', [AdminFaqController::class, 'index']);
+        Route::post('/faqs', [AdminFaqController::class, 'store']);
+        Route::put('/faqs/{id}', [AdminFaqController::class, 'update']);
+        Route::delete('/faqs/{id}', [AdminFaqController::class, 'destroy']);
     });
 });
