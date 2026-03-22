@@ -13,6 +13,7 @@ import AdminCandidates from '@/views/admin/AdminCandidates.vue'
 import AdminUsers from '@/views/admin/AdminUsers.vue'
 import AdminRequests from '@/views/admin/AdminRequests.vue'
 import AdminFaq from '@/views/admin/AdminFaq.vue'
+import AdminOccupations from '@/views/admin/AdminOccupations.vue'
 
 const routes = [
   { path: '/', redirect: '/candidates' },
@@ -42,6 +43,7 @@ const routes = [
       { path: 'users', component: AdminUsers },
       { path: 'requests', component: AdminRequests },
       { path: 'faq', component: AdminFaq },
+      { path: 'occupations', component: AdminOccupations },
     ]
   }
 ]

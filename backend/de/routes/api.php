@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminFaqController;
+use App\Http\Controllers\AdminOccupationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\ReportController;
@@ -18,6 +19,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::patch('/me/language', [AuthController::class, 'updateLanguage']);
+
+    Route::get('/occupations', [AdminOccupationController::class, 'list']);
 
     Route::get('/candidates/filter-options', [CandidateController::class, 'filterOptions']);
     Route::get('/candidates', [CandidateController::class, 'index']);
@@ -42,6 +45,12 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::patch('/users/{id}', [AdminController::class, 'userUpdate']);
         Route::delete('/users/{id}', [AdminController::class, 'userDestroy']);
         Route::get('/requests', [RequestController::class, 'adminIndex']);
+
+        // Occupation management
+        Route::get('/occupations', [AdminOccupationController::class, 'index']);
+        Route::post('/occupations', [AdminOccupationController::class, 'store']);
+        Route::put('/occupations/{id}', [AdminOccupationController::class, 'update']);
+        Route::delete('/occupations/{id}', [AdminOccupationController::class, 'destroy']);
 
         // FAQ management
         Route::get('/faqs', [AdminFaqController::class, 'index']);

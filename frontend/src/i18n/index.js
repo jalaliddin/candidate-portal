@@ -11,6 +11,7 @@ const messages = {
       adminUsers: 'Clients',
       adminRequests: 'Requests',
       adminFaq: 'FAQ Bot',
+      adminOccupations: 'Occupations',
       logout: 'Logout'
     },
     auth: {
@@ -165,6 +166,7 @@ const messages = {
       adminUsers: 'Klienten',
       adminRequests: 'Anfragen',
       adminFaq: 'FAQ Bot',
+      adminOccupations: 'Berufe',
       logout: 'Abmelden'
     },
     auth: {

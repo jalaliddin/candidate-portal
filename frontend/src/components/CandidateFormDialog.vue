@@ -85,11 +85,14 @@
                 />
               </v-col>
               <v-col cols="6">
-                <v-text-field
+                <v-autocomplete
                   v-model="form.country_of_origin"
+                  :items="COUNTRIES"
                   label="Country of Origin *"
                   variant="outlined"
                   density="compact"
+                  clearable
+                  :error-messages="errors.country_of_origin"
                 />
               </v-col>
             </v-row>
@@ -106,11 +109,14 @@
             />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field
+            <v-autocomplete
               v-model="form.occupation"
+              :items="occupationNames"
               label="Occupation *"
               variant="outlined"
               density="compact"
+              clearable
+              :loading="occupationsLoading"
               :error-messages="errors.occupation"
             />
           </v-col>
@@ -199,8 +205,9 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import api from '@/plugins/axios'
+import { COUNTRIES } from '@/composables/useCountries'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -224,6 +231,20 @@ const isDragging = ref(false)
 const germanLevels = ['None', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native']
 const statusItems = ['Active', 'Inactive', 'Placed']
 const languageLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native']
+
+const occupations = ref([])
+const occupationsLoading = ref(false)
+const occupationNames = computed(() => occupations.value.map(o => o.name))
+
+onMounted(async () => {
+  occupationsLoading.value = true
+  try {
+    const { data } = await api.get('/occupations')
+    occupations.value = data
+  } finally {
+    occupationsLoading.value = false
+  }
+})
 
 const defaultForm = () => ({
   first_name: '',
