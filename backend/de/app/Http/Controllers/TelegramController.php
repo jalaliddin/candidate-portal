@@ -50,7 +50,7 @@ class TelegramController extends Controller
             return response()->json(['ok' => true]);
         }
 
-        $reply = $this->askOpenAI($text, $faqs);
+        $reply = $this->askGemini($text, $faqs);
 
         if ($reply) {
             $this->sendTelegramMessage($chatId, $reply, $messageId);
@@ -59,7 +59,7 @@ class TelegramController extends Controller
         return response()->json(['ok' => true]);
     }
 
-    private function askOpenAI(string $userMessage, $faqs): ?string
+    private function askGemini(string $userMessage, $faqs): ?string
     {
         $faqList = $faqs
             ->map(fn ($faq) => ($faq->category ? "[{$faq->category}]\n" : '')."Q: {$faq->question}\nA: {$faq->answer}")
@@ -75,26 +75,31 @@ FAQ:
 {$faqList}
 PROMPT;
 
+        $model = config('services.gemini.model', 'gemini-2.0-flash');
+        $apiKey = config('services.gemini.api_key');
+
         try {
-            $response = Http::withToken(config('services.openai.api_key'))
-                ->timeout(20)
-                ->post('https://api.openai.com/v1/chat/completions', [
-                    'model'       => config('services.openai.model', 'gpt-4o-mini'),
-                    'messages'    => [
-                        ['role' => 'system', 'content' => $systemPrompt],
-                        ['role' => 'user', 'content' => $userMessage],
+            $response = Http::timeout(20)
+                ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
+                    'system_instruction' => [
+                        'parts' => [['text' => $systemPrompt]],
                     ],
-                    'max_tokens'  => 500,
-                    'temperature' => 0.3,
+                    'contents' => [
+                        ['role' => 'user', 'parts' => [['text' => $userMessage]]],
+                    ],
+                    'generationConfig' => [
+                        'maxOutputTokens' => 500,
+                        'temperature'     => 0.3,
+                    ],
                 ]);
 
             if ($response->successful()) {
-                return $response->json('choices.0.message.content');
+                return $response->json('candidates.0.content.parts.0.text');
             }
 
-            Log::error('OpenAI error', ['status' => $response->status(), 'body' => $response->body()]);
+            Log::error('Gemini error', ['status' => $response->status(), 'body' => $response->body()]);
         } catch (\Exception $e) {
-            Log::error('OpenAI exception', ['message' => $e->getMessage()]);
+            Log::error('Gemini exception', ['message' => $e->getMessage()]);
         }
 
         return null;
