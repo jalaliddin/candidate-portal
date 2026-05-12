@@ -14,30 +14,38 @@ class TelegramController extends Controller
     {
         $update = $request->all();
 
-        $message = $update['message'] ?? $update['edited_message'] ?? null;
+        $businessMessage = $update['business_message'] ?? $update['edited_business_message'] ?? null;
+        $regularMessage = $update['message'] ?? $update['edited_message'] ?? null;
+
+        $isBusinessMode = $businessMessage !== null;
+        $message = $businessMessage ?? $regularMessage;
 
         if (! $message) {
             return response()->json(['ok' => true]);
         }
 
-        $chatType = $message['chat']['type'] ?? 'private';
         $chatId = $message['chat']['id'];
         $messageId = $message['message_id'];
         $text = $message['text'] ?? null;
+        $businessConnectionId = $message['business_connection_id'] ?? null;
 
-        // Only respond in groups
-        if (! in_array($chatType, ['group', 'supergroup'], true)) {
-            return response()->json(['ok' => true]);
+        if (! $isBusinessMode) {
+            $chatType = $message['chat']['type'] ?? 'private';
+
+            // Only respond in groups for regular messages
+            if (! in_array($chatType, ['group', 'supergroup'], true)) {
+                return response()->json(['ok' => true]);
+            }
+
+            // Optional: restrict to a specific group
+            $allowedGroupId = config('services.telegram.group_id');
+            if ($allowedGroupId && (string) $chatId !== (string) $allowedGroupId) {
+                return response()->json(['ok' => true]);
+            }
         }
 
         // Skip commands and empty messages
         if (! $text || str_starts_with($text, '/')) {
-            return response()->json(['ok' => true]);
-        }
-
-        // Optional: restrict to a specific group
-        $allowedGroupId = config('services.telegram.group_id');
-        if ($allowedGroupId && (string) $chatId !== (string) $allowedGroupId) {
             return response()->json(['ok' => true]);
         }
 
@@ -53,7 +61,7 @@ class TelegramController extends Controller
         $reply = $this->askGemini($text, $faqs);
 
         if ($reply) {
-            $this->sendTelegramMessage($chatId, $reply, $messageId);
+            $this->sendTelegramMessage($chatId, $reply, $messageId, $businessConnectionId);
         }
 
         return response()->json(['ok' => true]);
@@ -89,7 +97,7 @@ PROMPT;
                     ],
                     'generationConfig' => [
                         'maxOutputTokens' => 500,
-                        'temperature'     => 0.3,
+                        'temperature' => 0.3,
                     ],
                 ]);
 
@@ -105,17 +113,23 @@ PROMPT;
         return null;
     }
 
-    private function sendTelegramMessage(int|string $chatId, string $text, int $replyToMessageId): void
+    private function sendTelegramMessage(int|string $chatId, string $text, int $replyToMessageId, ?string $businessConnectionId = null): void
     {
+        $payload = [
+            'chat_id' => $chatId,
+            'text' => $text,
+            'reply_to_message_id' => $replyToMessageId,
+            'parse_mode' => 'HTML',
+        ];
+
+        if ($businessConnectionId) {
+            $payload['business_connection_id'] = $businessConnectionId;
+        }
+
         try {
             Http::timeout(10)->post(
                 'https://api.telegram.org/bot'.config('services.telegram.bot_token').'/sendMessage',
-                [
-                    'chat_id'              => $chatId,
-                    'text'                 => $text,
-                    'reply_to_message_id'  => $replyToMessageId,
-                    'parse_mode'           => 'HTML',
-                ]
+                $payload
             );
         } catch (\Exception $e) {
             Log::error('Telegram send error', ['message' => $e->getMessage()]);
